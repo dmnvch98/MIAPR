@@ -12,7 +12,28 @@ public class KMeans {
     private final List<DataPoint> dataPoints; // список точек данных
     private List<Cluster> clusters; // список кластеров
     private int iteration = 0;
-    private final List<Color> colors = List.of(Color.RED, Color.BROWN, Color.GREENYELLOW, Color.GREEN, Color.GRAY, Color.BLUE, Color.CADETBLUE);
+    private final List<Color> colors = List.of(
+        Color.RED,
+        Color.BROWN,
+        Color.GREENYELLOW,
+        Color.GREEN,
+        Color.GRAY,
+        Color.BLUE,
+        Color.DARKRED,
+        Color.DARKGRAY,
+        Color.DARKBLUE,
+        Color.CADETBLUE,
+        Color.CYAN,
+        Color.DEEPSKYBLUE,
+        Color.HOTPINK,
+        Color.INDIGO,
+        Color.LIGHTGREEN,
+        Color.MAGENTA,
+        Color.ORANGERED,
+        Color.SADDLEBROWN,
+        Color.TURQUOISE,
+        Color.YELLOWGREEN);
+
 
     private List<List<Cluster>> intermediateClusters;
 
