@@ -1,5 +1,8 @@
-package com.example.miapr;
+package com.example.miapr.iprFirst;
 
+import com.example.miapr.iprFirst.model.Cluster;
+import com.example.miapr.iprFirst.model.DataPoint;
+import com.example.miapr.iprFirst.utils.AlgorithmManager;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -13,13 +16,13 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HelloController {
+public class Controller {
     private int iteration = 0;
     @FXML
     private Canvas maximinCanvas;
     @FXML
     private Canvas canvas;
-    private List<List<Cluster>> intermediateClusters;
+    private List<List<Cluster>> kMeansClusters;
     private List<Cluster> maximinClusters;
     @FXML
     private Button nextIteration;
@@ -36,46 +39,40 @@ public class HelloController {
     private TextField iterationQtyInput;
 
     @FXML
-    private Button start;
-
-    @FXML
     private AnchorPane anchorPane;
-
-    @FXML
-    private Button clear;
 
     @FXML
     void start(MouseEvent event) {
         clearCanvases();
+
         int elementsQty = Integer.parseInt(elementsQtyInput.getText());
         int iterationsQty = Integer.parseInt(iterationQtyInput.getText());
         int clustersQty = Integer.parseInt(clustersQtyInput.getText());
-        Visualization visualization = new Visualization(elementsQty, iterationsQty, clustersQty);
 
-        intermediateClusters = visualization.showClusters();
-        maximinClusters = visualization.getMaxMinClusters();
+        AlgorithmManager algorithmManager = new AlgorithmManager(elementsQty, iterationsQty, clustersQty);
+
+        kMeansClusters = algorithmManager.getKMeansClusters();
+        maximinClusters = algorithmManager.getMaxminClusters();
 
         iteration = 1;
-        // Отображение точек первой итерации
+        // Отображение точек
         initCirclesForKMeans(iteration);
         initCirclesForMaxMin();
         iterationText.setText(String.valueOf(iteration));
         nextIteration.setDisable(false);
-        iteration++;
-
     }
 
     @FXML
-    void nextInteration() {
-        initCirclesForKMeans(iteration);
+    void showNextIteration() {
         iteration++;
+        initCirclesForKMeans(iteration);
         iterationText.setText(String.valueOf(iteration));
         nextIteration.setDisable(iteration == Integer.parseInt(iterationQtyInput.getText()));
     }
 
     private void initCirclesForKMeans(int iteration) {
         List<Circle> circles = new ArrayList<>();
-        for (Cluster cluster : intermediateClusters.get(iteration)) {
+        for (Cluster cluster : kMeansClusters.get(iteration)) {
             Color color = cluster.getColor();
 
             for (DataPoint point : cluster.getPoints()) {

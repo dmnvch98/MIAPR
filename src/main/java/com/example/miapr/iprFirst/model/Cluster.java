@@ -1,4 +1,4 @@
-package com.example.miapr;
+package com.example.miapr.iprFirst.model;
 
 import javafx.scene.paint.Color;
 
@@ -10,7 +10,7 @@ public class Cluster {
     private final int id; // идентификатор кластера
     private DataPoint center; // центр кластера
     private List<DataPoint> points; // список точек в кластере
-    private Color color;
+    private final Color color;
 
     public Cluster(int id, DataPoint center, Color color) {
         this.id = id;

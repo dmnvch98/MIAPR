@@ -1,11 +1,12 @@
-package com.example.miapr;
+package com.example.miapr.iprFirst.algorithms;
 
-import javafx.scene.paint.Color;
+import com.example.miapr.iprFirst.utils.Utils;
+import com.example.miapr.iprFirst.model.Cluster;
+import com.example.miapr.iprFirst.model.DataPoint;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.*;
 
 public class KMeans {
     private final int k; // количество кластеров
@@ -13,28 +14,6 @@ public class KMeans {
     private final List<DataPoint> dataPoints; // список точек данных
     private List<Cluster> clusters; // список кластеров
     private int iteration = 0;
-    private final List<Color> colors = List.of(
-        Color.RED,
-        Color.BROWN,
-        Color.GREENYELLOW,
-        Color.GREEN,
-        Color.GRAY,
-        Color.BLUE,
-        Color.DARKRED,
-        Color.DARKGRAY,
-        Color.DARKBLUE,
-        Color.CADETBLUE,
-        Color.CYAN,
-        Color.DEEPSKYBLUE,
-        Color.HOTPINK,
-        Color.INDIGO,
-        Color.LIGHTGREEN,
-        Color.MAGENTA,
-        Color.ORANGERED,
-        Color.SADDLEBROWN,
-        Color.TURQUOISE,
-        Color.YELLOWGREEN);
-
 
     private List<List<Cluster>> intermediateClusters;
 
@@ -76,7 +55,7 @@ public class KMeans {
             //Из массива точек извлекается точка по сгенерированному индексу
             DataPoint randomPoint = dataPoints.get(randomIndex);
             //Создается кластер, где наша точка указывается как центр
-            Cluster cluster = new Cluster(i, randomPoint, colors.get(i));
+            Cluster cluster = new Cluster(i, randomPoint, Utils.COLORS.get(i));
             clusters.add(cluster);
         }
     }
