@@ -95,7 +95,7 @@ public class KMeans {
                 converged = false;
             }
             // Очищаем список точек в кластере перед следующей итерацией если это не последняя итерация
-            if (iteration != 99) {
+            if (iteration != maxIterations - 1) {
                 cluster.clearPoints();
             }
         }
