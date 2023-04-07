@@ -12,7 +12,9 @@ public class KMeans {
     private final List<DataPoint> dataPoints; // список точек данных
     private List<Cluster> clusters; // список кластеров
     private int iteration = 0;
-    private List<Color> colors;
+    private final List<Color> colors = List.of(Color.RED, Color.BROWN, Color.GREENYELLOW, Color.GREEN, Color.GRAY, Color.BLUE, Color.CADETBLUE);
+
+    private List<List<Cluster>> intermediateClusters;
 
     public KMeans(int k, int maxIterations, List<DataPoint> dataPoints) {
         this.k = k;
@@ -20,10 +22,12 @@ public class KMeans {
         this.dataPoints = dataPoints;
     }
 
-    public List<Cluster> run() {
-        colors = List.of(Color.RED, Color.BROWN, Color.YELLOW, Color.GREEN, Color.GRAY, Color.BLUE, Color.CADETBLUE);
+    public List<List<Cluster>> run() {
         // Инициализируем кластеры случайными точками данных
         initializeClusters();
+        // Инициализируем промежуточные список промежуточных кластеров
+        intermediateClusters = new ArrayList<>();
+
 
         boolean converged = false;
 
@@ -36,7 +40,7 @@ public class KMeans {
 
             iteration++;
         }
-        return clusters;
+        return intermediateClusters;
     }
 
     private void initializeClusters() {
@@ -72,118 +76,44 @@ public class KMeans {
         }
     }
 
-    private boolean recalculateClusterCenters() {
-        boolean converged = true;
+private boolean recalculateClusterCenters() {
+    boolean converged = true;
 
-        for (Cluster cluster : clusters) {
-            if (cluster.getPoints().isEmpty()) {
-                // Если кластер пуст, пропускаем его
-                continue;
-            }
-
-            // Сохраняем предыдущее положение центра кластера
-            DataPoint oldCenter = cluster.getCenter();
-
-            // Рассчитываем новое положение центра кластера как среднее всех точек в кластере
-            DataPoint newCenter = DataPoint.mean(cluster.getPoints());
-
-            // Обновляем центр кластера
-            cluster.setCenter(newCenter);
-
-            // Проверяем, сходится ли положение центра кластера
-            if (!oldCenter.equals(newCenter)) {
-                converged = false;
-            }
-            // Очищаем список точек в кластере перед следующей итерацией если это не последняя итерация
-            if (iteration != maxIterations - 1) {
-                cluster.clearPoints();
-            }
+    List<Cluster> iterateClusters = new ArrayList<>();
+    for (Cluster cluster : clusters) {
+        if (cluster.getPoints().isEmpty()) {
+            // Если кластер пуст, пропускаем его
+            continue;
         }
 
+        // Сохраняем предыдущее положение центра кластера
+        DataPoint oldCenter = cluster.getCenter();
 
-        return converged;
-    }
-}
+        // Рассчитываем новое положение центра кластера как среднее всех точек в кластере
+        DataPoint newCenter = DataPoint.mean(cluster.getPoints());
 
-class DataPoint {
-    private double x;
-    private double y;
+        // Обновляем центр кластера
+        cluster.setCenter(newCenter);
 
-    public DataPoint(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public static DataPoint mean(List<DataPoint> points) {
-        double sumX = 0;
-        double sumY = 0;
-        int size = points.size();
-
-        for (DataPoint point : points) {
-            sumX += point.getX();
-            sumY += point.getY();
+        // Проверяем, сходится ли положение центра кластера
+        if (!oldCenter.equals(newCenter)) {
+            converged = false;
         }
 
-        double meanX = sumX / size;
-        double meanY = sumY / size;
+        // Создаем копию кластера, содержащую только точки, назначенные на текущей итерации
+        Cluster iterateCluster = new Cluster(cluster.getId(), cluster.getCenter(), cluster.getColor());
+        iterateCluster.setPoints(new ArrayList<>(cluster.getPoints()));
 
-        return new DataPoint(meanX, meanY);
-    }
+        // Добавляем новый кластер в список
+        iterateClusters.add(iterateCluster);
 
-    public double distanceTo(DataPoint other) {
-        double dx = this.x - other.getX();
-        double dy = this.y - other.getY();
-        return Math.sqrt(dx * dx + dy * dy);
+        // Очищаем список точек в кластере перед следующей итерацией, если это не последняя итерация
+        if (iteration != maxIterations - 1) {
+            cluster.clearPoints();
+        }
     }
+    intermediateClusters.add(iterateClusters);
+    return converged;
 }
 
-class Cluster {
-
-    private final int id; // идентификатор кластера
-    private DataPoint center; // центр кластера
-    private List<DataPoint> points; // список точек в кластере
-    private Color color;
-
-    public Cluster(int id, DataPoint center, Color color) {
-        this.id = id;
-        this.center = center;
-        this.points = new ArrayList<>();
-        this.color = color;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public DataPoint getCenter() {
-        return center;
-    }
-
-    public void setCenter(DataPoint center) {
-        this.center = center;
-    }
-
-    public List<DataPoint> getPoints() {
-        return points;
-    }
-
-    public void addPoint(DataPoint point) {
-        points.add(point);
-    }
-
-    public void clearPoints() {
-        points.clear();
-    }
-
-    public Color getColor() {
-        return color;
-    }
 }

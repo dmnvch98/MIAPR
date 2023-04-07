@@ -4,13 +4,18 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.miapr.HelloController">
+<AnchorPane fx:id="anchorPane" prefHeight="647.0" prefWidth="501.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.miapr.HelloController">
    <children>
       <Line endX="385.0" layoutX="115.0" layoutY="536.0" startX="-115.0" />
-      <TextField fx:id="elementsQtyInput" layoutX="110.0" layoutY="554.0" prefHeight="26.0" prefWidth="98.0" promptText="Кол-во эл-ов" />
-      <TextField fx:id="iterationQtyInput" layoutX="214.0" layoutY="554.0" prefHeight="26.0" prefWidth="140.0" promptText="Макс кол-во ит-ций" />
-      <Button fx:id="start" layoutX="362.0" layoutY="554.0" mnemonicParsing="false" onMouseClicked="#start" prefHeight="26.0" prefWidth="125.0" text="Начать" />
-      <TextField fx:id="clustersQtyInput" layoutX="6.0" layoutY="554.0" prefHeight="26.0" prefWidth="98.0" promptText="Кол-во эл-ов" />
+      <TextField fx:id="elementsQtyInput" layoutX="123.0" layoutY="554.0" prefHeight="26.0" prefWidth="98.0" promptText="Кол-во эл-ов" />
+      <TextField fx:id="iterationQtyInput" layoutX="225.0" layoutY="554.0" prefHeight="26.0" prefWidth="140.0" promptText="Макс кол-во ит-ций" />
+      <Button fx:id="start" layoutX="370.0" layoutY="554.0" mnemonicParsing="false" onMouseClicked="#start" prefHeight="26.0" prefWidth="125.0" text="Начать" />
+      <TextField fx:id="clustersQtyInput" layoutX="3.0" layoutY="554.0" prefHeight="26.0" prefWidth="116.0" promptText="Кол-во клас-ров" />
+      <Button fx:id="nextIteration" layoutX="130.0" layoutY="597.0" mnemonicParsing="false" onMouseClicked="#nextInteration" text="Следующая итерация" />
+      <Text layoutX="25.0" layoutY="614.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Итерация:" />
+      <Text fx:id="iterationText" layoutX="107.0" layoutY="614.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-" />
+      <Button fx:id="clear" layoutX="282.0" layoutY="597.0" mnemonicParsing="false" onMouseClicked="#clear" text="Очистить" />
    </children>
 </AnchorPane>
