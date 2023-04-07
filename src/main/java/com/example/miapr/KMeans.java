@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.*;
 
 public class KMeans {
     private final int k; // количество кластеров
@@ -97,7 +98,7 @@ public class KMeans {
         }
     }
 
-private boolean recalculateClusterCenters() {
+    private boolean recalculateClusterCenters() {
     boolean converged = true;
 
     List<Cluster> iterateClusters = new ArrayList<>();

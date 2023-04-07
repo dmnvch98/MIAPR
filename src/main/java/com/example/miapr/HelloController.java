@@ -1,6 +1,7 @@
 package com.example.miapr;
 
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -14,8 +15,12 @@ import java.util.List;
 
 public class HelloController {
     private int iteration = 0;
-
+    @FXML
+    private Canvas maximinCanvas;
+    @FXML
+    private Canvas canvas;
     private List<List<Cluster>> intermediateClusters;
+    private List<Cluster> maximinClusters;
     @FXML
     private Button nextIteration;
     @FXML
@@ -41,41 +46,34 @@ public class HelloController {
 
     @FXML
     void start(MouseEvent event) {
-        anchorPane.getChildren().removeIf(node -> node instanceof Circle);
+        clearCanvases();
         int elementsQty = Integer.parseInt(elementsQtyInput.getText());
         int iterationsQty = Integer.parseInt(iterationQtyInput.getText());
         int clustersQty = Integer.parseInt(clustersQtyInput.getText());
         Visualization visualization = new Visualization(elementsQty, iterationsQty, clustersQty);
+
         intermediateClusters = visualization.showClusters();
+        maximinClusters = visualization.getMaxMinClusters();
+
         iteration = 1;
         // Отображение точек первой итерации
-        showCirclesForIteration(iteration);
+        initCirclesForKMeans(iteration);
+        initCirclesForMaxMin();
         iterationText.setText(String.valueOf(iteration));
         nextIteration.setDisable(false);
         iteration++;
+
     }
 
     @FXML
     void nextInteration() {
-        anchorPane.getChildren().removeIf(node -> node instanceof Circle);
-        showCirclesForIteration(iteration);
+        initCirclesForKMeans(iteration);
         iteration++;
         iterationText.setText(String.valueOf(iteration));
         nextIteration.setDisable(iteration == Integer.parseInt(iterationQtyInput.getText()));
     }
 
-    @FXML
-    void clear() {
-        clustersQtyInput.clear();
-        elementsQtyInput.clear();
-        iterationQtyInput.clear();
-        anchorPane.getChildren().removeIf(node -> node instanceof Circle);
-        iterationText.setText("-");
-        iteration = 0;
-    }
-
-    private void showCirclesForIteration(int iteration) {
-        anchorPane.getChildren().removeIf(node -> node instanceof Circle);
+    private void initCirclesForKMeans(int iteration) {
         List<Circle> circles = new ArrayList<>();
         for (Cluster cluster : intermediateClusters.get(iteration)) {
             Color color = cluster.getColor();
@@ -85,6 +83,42 @@ public class HelloController {
                 circles.add(circle);
             }
         }
-        anchorPane.getChildren().addAll(circles);
+        fillCanvas(circles, canvas);
+    }
+
+    private void fillCanvas(List<Circle> circles, Canvas canvas) {
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        for (Circle circle : circles) {
+            canvas.getGraphicsContext2D().setFill(circle.getFill());
+            canvas.getGraphicsContext2D().fillOval(circle.getCenterX() - circle.getRadius(), circle.getCenterY() - circle.getRadius(), circle.getRadius() * 2, circle.getRadius() * 2);
+        }
+    }
+
+    private void initCirclesForMaxMin() {
+        List<Circle> circles = new ArrayList<>();
+        for (Cluster cluster : maximinClusters) {
+            Color color = cluster.getColor();
+            for (DataPoint point : cluster.getPoints()) {
+                Circle circle = new Circle(point.getX(), point.getY(), 2, color);
+                circles.add(circle);
+            }
+        }
+        fillCanvas(circles, maximinCanvas);
+    }
+
+    @FXML
+    void clearAll() {
+        clustersQtyInput.clear();
+        elementsQtyInput.clear();
+        iterationQtyInput.clear();
+        anchorPane.getChildren().removeIf(node -> node instanceof Circle);
+        clearCanvases();
+        iterationText.setText("-");
+        iteration = 0;
+    }
+
+    private void clearCanvases() {
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        maximinCanvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 }
