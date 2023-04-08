@@ -56,18 +56,19 @@ public class Controller {
 
         iteration = 1;
         // Отображение точек
-        initCirclesForKMeans(iteration);
+        initCirclesForKMeans(0);
         initCirclesForMaxMin();
         iterationText.setText(String.valueOf(iteration));
         nextIteration.setDisable(false);
+        iteration++;
     }
 
     @FXML
     void showNextIteration() {
-        iteration++;
-        initCirclesForKMeans(iteration);
+        initCirclesForKMeans(iteration - 1);
         iterationText.setText(String.valueOf(iteration));
         nextIteration.setDisable(iteration == Integer.parseInt(iterationQtyInput.getText()));
+        iteration++;
     }
 
     private void initCirclesForKMeans(int iteration) {

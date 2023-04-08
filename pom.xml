@@ -28,6 +28,7 @@
     </dependencies>
 
     <build>
+        <finalName>Lab1</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -36,6 +37,7 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+
                 </configuration>
             </plugin>
             <plugin>
@@ -44,7 +46,6 @@
                 <version>0.0.8</version>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>com.example.miapr/com.example.miapr.iprFirst.Application</mainClass>
